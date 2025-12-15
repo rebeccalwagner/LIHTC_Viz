@@ -8,8 +8,6 @@ library(plotly)
 # import data
 data <- read.csv("./data/LIHTCPUB.csv")
 
-
-
 ##############################
 # number of total projects across all years 
 total_units <- data %>% 
