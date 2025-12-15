@@ -110,8 +110,10 @@ map_anim <- ggplot() +
   enter_fade() +
   exit_fade()
 
-animate(map_anim, 
+anim <- animate(map_anim, 
         nframes = 150, 
         duration = 20,
         width = 1200, 
         height = 800)
+
+anim_save("./docs/assets/map_anim.gif", animation = anim)
