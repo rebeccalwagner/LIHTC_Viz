@@ -40,7 +40,7 @@ data <- data %>%
   left_join(population, by = c("proj_st" = "state", "yr_pis" = "year"))
 
 ##############################
-# Calculate total allocations per capita for each state and year
+# Calculate total allocations 
 
 state_per_capita_allocations <- data %>% 
   filter(yr_pis!=8888, 
@@ -50,47 +50,6 @@ state_per_capita_allocations <- data %>%
   summarise(total_allocamt_real = sum(allocamt_real, na.rm = TRUE),
             pop = first(pop),
             allocation_per_capita = total_allocamt_real/pop)
-
-overall_allocations <- data %>% 
-  filter(yr_pis!=8888, 
-         yr_pis!=9999, 
-         !proj_st %in% c("AS", "GU", "MP", "PR", "VI")) %>% 
-  group_by(yr_pis) %>% 
-  summarise(total_allocamt_real = sum(allocamt_real, na.rm=T)) %>% 
-  mutate(total_allocamt_real_bil = total_allocamt_real/1000000000)
-
-##############################
-# Static, National Plot
-
-p <- ggplot(overall_allocations, aes(x = yr_pis, y = total_allocamt_real_bil, group = 1,
-                                     text = paste0(yr_pis,
-                                                   "<br>",
-                                                   round(total_allocamt_real_bil, 2), "B Allocated"))) +
-  geom_line(color = "#143642", size = 1.2) +
-  geom_point(color = "#143642", size = 2) +
-  labs(
-    title = "Total Real LIHTC Allocations Across All States",
-    subtitle = "Aggregate allocation amounts over time",
-    x = "",
-    y = "Total Allocation (Billions of 2025 dollars)"
-  ) +
-  scale_y_continuous(labels = function(x) paste0("$", x, "B")) +
-  theme_minimal(base_size = 14) +
-  theme(
-    plot.background = element_rect(fill = "white", color = NA),
-    panel.background = element_rect(fill = "white", color = NA),
-    panel.grid.major = element_blank(),
-    panel.grid.minor = element_blank(),
-    axis.line = element_line(color = "#143642"),
-    plot.title = element_text(color = "#143642", size = 16, face = "bold"),
-    plot.subtitle = element_text(color = "#143642", size = 12),
-    axis.title = element_text(color = "#143642", size = 12),
-    axis.text = element_text(color = "#143642")
-  )
-
-# Convert to plotly
-ggplotly(p, tooltip = "text") %>%
-  layout(plot_bgcolor = "white", paper_bgcolor = "white")
 
 ##############################
 # Interactive, State Plot
@@ -113,7 +72,6 @@ state_choices <- setNames(
 
 # set color palette
 state_colors <- c("#143642", "#6D2E46", "#0F8B8D", "#A8201A", "#EC9A29", "#2A5F6C", "#8B4F5E","#1BA098","#D4571A","#F4C430") 
-
 
 ##############################
 # Shiny app
@@ -163,10 +121,10 @@ server <- function(input, output, session) {
     # Create plot based on selected metric
     if (input$metric == "per_capita") {
       p <- ggplot(state_data, aes(x = yr_pis, y = allocation_per_capita, 
-                             color = proj_st, group = proj_st,
-                             text = paste0("State: ", proj_st, 
-                                          "<br>Year: ", yr_pis,
-                                          "<br>Per Capita: $", round(allocation_per_capita, 2)))) +
+                                  color = proj_st, group = proj_st,
+                                  text = paste0("State: ", proj_st, 
+                                                "<br>Year: ", yr_pis,
+                                                "<br>Per Capita: $", round(allocation_per_capita, 2)))) +
         geom_line(size = 1.2) +
         geom_point(size = 2) +
         labs(
@@ -199,10 +157,10 @@ server <- function(input, output, session) {
         mutate(total_allocamt_millions = total_allocamt_real / 1e6)
       
       p <- ggplot(state_data, aes(x = yr_pis, y = total_allocamt_millions, 
-                             color = proj_st, group = proj_st,
-                             text = paste0("State: ", proj_st,
-                                          "<br>Year: ", yr_pis,
-                                          "<br>Total: $", round(total_allocamt_millions, 2), "M"))) +
+                                  color = proj_st, group = proj_st,
+                                  text = paste0("State: ", proj_st,
+                                                "<br>Year: ", yr_pis,
+                                                "<br>Total: $", round(total_allocamt_millions, 2), "M"))) +
         geom_line(size = 1.2) +
         geom_point(size = 2) +
         labs(

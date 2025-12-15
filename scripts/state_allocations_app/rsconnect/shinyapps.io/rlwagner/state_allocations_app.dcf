@@ -1,0 +1,10 @@
+name: state_allocations_app
+title:
+username: rlwagner
+account: rlwagner
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 16318193
+bundleId: 11327295
+url: https://rlwagner.shinyapps.io/state_allocations_app/
+version: 1
