@@ -5,85 +5,207 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>LIHTC Allocations Analysis</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            max-width: 1200px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
         }
         
-        h1 {
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #143642 0%, #1e4d5c 100%);
+            color: white;
+            border-radius: 12px;
+            margin-bottom: 50px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        header h1 {
+            font-size: 2.8em;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        header p {
+            font-size: 1.3em;
+            color: #b8d4e0;
+            font-weight: 300;
+        }
+        
+        .plot-section {
+            background: white;
+            padding: 40px;
+            margin-bottom: 40px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .plot-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        
+        .plot-section h2 {
             color: #143642;
-            text-align: center;
-            margin-bottom: 10px;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #6D2E46;
         }
         
-        .subtitle {
-            text-align: center;
-            color: #6D2E46;
-            margin-bottom: 40px;
+        .plot-section p {
+            color: #666;
+            margin-bottom: 20px;
+            font-size: 1.05em;
         }
         
-        .plot-container {
-            background-color: white;
-            padding: 20px;
-            margin-bottom: 40px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .plot-container img {
+        .plot-section img {
             width: 100%;
             height: auto;
-            display: block;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
-        .plot-container iframe {
+        .plot-section iframe {
             width: 100%;
-            height: 600px;
+            height: 700px;
             border: none;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
-        h2 {
-            color: #143642;
-            margin-top: 0;
+        .iframe-shiny {
+            height: 800px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #666;
+            margin-top: 50px;
+        }
+        
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            
+            header p {
+                font-size: 1.1em;
+            }
+            
+            .plot-section {
+                padding: 25px;
+            }
+            
+            .plot-section h2 {
+                font-size: 1.5em;
+            }
+            
+            .plot-section iframe {
+                height: 500px;
+            }
+            
+            .iframe-shiny {
+                height: 600px;
+            }
+        }
+        
+        .tag {
+            display: inline-block;
+            background: #6D2E46;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            margin-bottom: 15px;
+            font-weight: 500;
         }
     </style>
 </head>
 <body>
-    <h1>Low Income Housing Tax Credit Analysis</h1>
-    <p class="subtitle">Exploring LIHTC allocations over time</p>
-    
-    <div class="plot-container">
-        <img src="assets/history_line_graph.png" alt="History of the Low Income Housing Tax Credit">
-    </div>
-    
-    <div class="plot-container">
-        <h2>National Allocations Over Time</h2>
-        <iframe src="assets/national_allocations.html"></iframe>
-    </div>
+    <div class="container">
+        <header>
+            <h1>Low Income Housing Tax Credit Analysis</h1>
+            <p>Exploring LIHTC allocations, trends, and geographic patterns</p>
+        </header>
+        
+        <div class="plot-section">
+            <span class="tag">Historical Overview</span>
+            <h2>History of LIHTC Program</h2>
+            <p>Timeline showing the evolution and key milestones of the Low Income Housing Tax Credit program.</p>
+            <img src="assets/history_line_Graph.png" alt="History of the Low Income Housing Tax Credit">
+        </div>
 
-    <div class="plot-container">
-        <h2>State-by-State Comparison</h2>
-        <iframe src="https://rlwagner.shinyapps.io/state_allocations_app/" class="iframe-shiny"></iframe>
-    </div>
+        <div class="plot-section">
+            <span class="tag">Animated Map</span>
+            <h2>Geographic Animation</h2>
+            <p>Animated map showing LIHTC allocations across states over time.</p>
+            <img src="assets/map_anim.gif" alt="Animated Map of LIHTC Allocations">
+        </div>
+        
+        <div class="plot-section">
+            <span class="tag">Interactive Visualization</span>
+            <h2>National Allocations Over Time</h2>
+            <p>Interactive chart displaying national LIHTC allocation trends across years.</p>
+            <iframe src="assets/national_allocations.html"></iframe>
+        </div>
 
-     <div class="plot-container">
-        <img src="assets/lowincome_hist.png" alt="History of the Low Income Housing Tax Credit">
-    </div>
+        <div class="plot-section">
+            <span class="tag">Interactive Dashboard</span>
+            <h2>State-by-State Comparison</h2>
+            <p>Explore detailed state-level data with this interactive Shiny application.</p>
+            <iframe src="https://rlwagner.shinyapps.io/state_allocations_app/" class="iframe-shiny"></iframe>
+        </div>
 
-    <div class="plot-container">
-        <img src="assets/lowincome_violin.png" alt="History of the Low Income Housing Tax Credit">
-    </div>
+        <div class="plot-section">
+            <span class="tag">DDA & QCT Analysis</span>
+            <h2>Difficult Development Areas & Qualified Census Tracts</h2>
+            <p>Analysis of LIHTC projects in DDAs and QCTs.</p>
+            <img src="assets/dda_qct.png" alt="DDA and QCT Analysis">
+        </div>
 
-    <div class="plot-container">
-        <img src="assets/missing_plot.png" alt="History of the Low Income Housing Tax Credit">
-    </div>
+        <div class="plot-section">
+            <span class="tag">Distribution Analysis</span>
+            <h2>Low Income Housing Distribution</h2>
+            <p>Histogram showing the distribution patterns of low income housing units.</p>
+            <img src="assets/lowincome_hist.png" alt="Low Income Housing Distribution">
+        </div>
 
-    <div class="plot-container">
-        <img src="assets/map_anim.gif" alt="History of the Low Income Housing Tax Credit">
-    </div>
+        <div class="plot-section">
+            <span class="tag">Statistical Visualization</span>
+            <h2>Low Income Housing Violin Plot</h2>
+            <p>Violin plot illustrating the distribution and density of low income housing metrics.</p>
+            <img src="assets/lowincome_violin.png" alt="Low Income Housing Violin Plot">
+        </div>
 
+        <div class="plot-section">
+            <span class="tag">Interactive Visualization</span>
+            <h2>Missing Data Analysis</h2>
+            <p>Interactive visualization of missing data patterns in the LIHTC dataset.</p>
+            <iframe src="assets/missing_plot.html"></iframe>
+        </div>
+
+
+        <footer>
+            <p>LIHTC Analysis Dashboard • Data visualization and analysis of Low Income Housing Tax Credits</p>
+        </footer>
+    </div>
 </body>
 </html>
