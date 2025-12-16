@@ -25,6 +25,26 @@ The Low Income Housing Tax Credit (LIHTC) is the federal government's primary pr
 
 ---
 
+## Repository Structure
+
+```
+LIHTC_Viz/
+├── data/
+│   ├── all data files used
+├── docs/
+│   ├── index.html (html for associated io webpage)
+│   └── assets (contains all produced visualizations)
+├── presentation/
+│   ├── mp4 and pptx presentation files
+├── scripts/
+│   ├── all the R scripts used to create visualizations
+├── .gitignore
+├── FinalProject.Rproj
+└── README.md
+```
+
+---
+
 ## Visualizations
 
 This project features **8 diverse visualizations**, combining static, animated, and interactive elements:
