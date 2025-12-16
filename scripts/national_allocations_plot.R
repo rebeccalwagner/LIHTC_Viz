@@ -82,6 +82,14 @@ p <- ggplot(overall_allocations, aes(x = yr_pis, y = total_allocamt_real_bil, gr
     axis.text = element_text(color = "#143642")
   )
 
+p
+
+ggsave("./docs/assets/national_allocations.png", 
+       plot=p,
+       width = 11, 
+       height = 5.625,  
+       dpi = 300)
+
 # Convert to plotly
 ggplotly(p, tooltip = "text") %>%
   layout(plot_bgcolor = "white", paper_bgcolor = "white")

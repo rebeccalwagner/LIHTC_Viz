@@ -2,7 +2,7 @@ library(dplyr)
 library(ggplot2)
 library(tidyr)
 library(plotly)
-library(DT)
+library(htmlwidgets)
 
 ##############################
 # give column names readable labels
@@ -119,37 +119,48 @@ missing_by_category <- data %>%
                             variable),
     # Categorize variables
     category = case_when(
-      variable %in% c("project", "proj_add", "proj_cty", "proj_st", "proj_zip", "state_id","yr_pis") ~ "Basic Info",
+      variable %in% c("project", "proj_add", "proj_cty", "proj_st", "proj_zip", "state_id", "yr_pis") ~ 
+        "Basic Info",
+      
       variable %in% c("latitude", "longitud", "fips1990", "fips2000", "fips2010", "fips2020",
-                      "place1990", "place2000", "place2010", "place2020") ~ "Geographic",
+                      "place1990", "place2000", "place2010", "place2020", "metro", "dda", "qct") ~ 
+        "Location",
+      
       variable %in% c("n_units", "li_units", "n_0br", "n_1br", "n_2br", "n_3br", "n_4br",
-                      "n_unitsr", "li_unitr", "ceilunit") ~ "Unit Details",
+                      "n_unitsr", "li_unitr", "ceilunit") ~ 
+        "Units",
+      
       variable %in% c("bond", "home", "cdbg", "htf", "fha", "hopevi", "tcap", "tcep", "rad", 
-                      "qozf", "mff_ra", "fmha_514", "fmha_515", "fmha_538") ~ "Funding Sources",
-      variable %in% c("trgt_pop", "trgt_fam", "trgt_eld", "trgt_dis", "trgt_hml", "trgt_oth", "trgt_spc") ~ "Target Population",
-      variable %in% c("yr_alloc", "allocamt", "home_amt", "cdbg_amt", "htf_amt", "hpvi_amt", "tcap_amt", 
-                      "tcep_amt", "qozf_amt") ~ "Funding Amounts",
+                      "qozf", "mff_ra", "fmha_514", "fmha_515", "fmha_538", "yr_alloc", "allocamt", 
+                      "home_amt", "cdbg_amt", "htf_amt", "hpvi_amt", "tcap_amt", "tcep_amt", "qozf_amt") ~ 
+        "Financing",
+      
       variable %in% c("type", "credit", "non_prof", "basis", "rentasst", "inc_ceil", "low_ceil",
-                      "aff_period", "aff_yrs", "scattered", "resynd") ~ "Project Details",
-      variable %in% c("metro", "dda", "qct") ~ "Location Characteristics",
-      variable %in% c("nonprog", "nlm_reason", "nlm_spc", "datanote", "record_stat") ~ "Status",
-      TRUE ~ "Other"
-    )
-  ) %>%
+                      "aff_period", "aff_yrs", "scattered", "resynd", "trgt_pop", "trgt_fam", 
+                      "trgt_eld", "trgt_dis", "trgt_hml", "trgt_oth", "trgt_spc") ~ 
+        "Project Characteristics",
+      
+      variable %in% c("nonprog", "nlm_reason", "nlm_spc", "datanote", "record_stat") ~ 
+        "Status",
+      
+      TRUE ~ "Other")
+    ) %>%
   arrange(category, desc(pct_missing))
 
 # Create the plot
-ggplot(missing_by_category, aes(x = reorder(variable_label, pct_missing), 
-                                y = pct_missing, fill = category)) +
+p <- ggplot(missing_by_category, aes(x = reorder(variable_label, pct_missing), 
+                                     y = pct_missing,
+                                     fill = pct_missing,
+                                     text = paste0("Variable: ", variable_label, "\n",
+                                                   "Category: ", category, "\n",
+                                                   "Missing: ", round(pct_missing, 1), "%"))) +
   geom_col(color = "#143642", alpha = 0.8) +
   coord_flip() +
-  scale_fill_manual(values = c("#143642", "#6D2E46", "#0F8B8D", "#A8201A", "#EC9A29", 
-                               "#2A5F6C", "#8B4F5E", "#1BA098", "#D4571A", "#7A9B76")) +
+  scale_fill_gradient(low = "#0F8B8D", high = "#6D2E46") +
   scale_y_continuous(labels = scales::percent_format(scale = 1)) +
   labs(
     x = NULL,
     y = "Percent Missing",
-    fill = "Variable Type",
     title = "Missing data patterns in LIHTC database",
     subtitle = "Data on LIHTC Projects is often not reported well.",
     caption = "Only variables with missing data are shown.\nSource: HUD LIHTC Database (1987-2023)"
@@ -162,15 +173,24 @@ ggplot(missing_by_category, aes(x = reorder(variable_label, pct_missing),
     panel.grid.major.y = element_blank(),
     panel.grid.minor = element_blank(),
     axis.line = element_line(color = "#143642"),
-    axis.text.y = element_text(color = "#143642", size = 8),
+    axis.text.y = element_text(color = "#143642", size = 6),
     axis.text.x = element_text(color = "#143642", size = 10),
     axis.title = element_text(color = "#143642", size = 12),
     plot.title = element_text(color = "#143642", size = 16, face = "bold"),
     plot.subtitle = element_text(color = "#143642", size = 11),
     plot.caption = element_text(color = "#143642", size = 9, hjust = 0),
-    legend.position = "bottom",
-    legend.title = element_text(color = "#143642", face = "bold"),
-    legend.text = element_text(color = "#143642")
+    legend.position = "none"
   )
 
-ggsave("./docs/assets/missing_plot.png")
+# Convert to interactive plotly plot
+interactive_plot <- ggplotly(p, tooltip = "text")
+
+interactive_plot
+
+saveWidget(interactive_plot, "./docs/assets/missing_plot.html")
+
+ggsave("./docs/assets/missing_plot.png", 
+       plot = p,
+       width = 11, 
+       height = 6,  
+       dpi = 300)

@@ -116,4 +116,7 @@ anim <- animate(map_anim,
         width = 1200, 
         height = 800)
 
-anim_save("./docs/assets/map_anim.gif", animation = anim)
+anim_save("./docs/assets/map_anim.gif", animation = anim,
+          width = 11, 
+          height = 6,  
+          dpi = 300)

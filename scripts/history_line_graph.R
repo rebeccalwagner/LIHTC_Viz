@@ -75,5 +75,11 @@ p <- total_units %>%
     axis.text = element_text(color = "#143642")
   )
 
-ggsave("./docs/assets/history_line_graph.png", plot=p)
+p
+
+ggsave("./docs/assets/history_line_graph.png",
+       plot=p,
+       width = 11, 
+       height = 5.625,  
+       dpi = 300)
 

@@ -60,7 +60,10 @@ p <- ggplot(data_pct, aes(x = pct_low_income)) +
     plot.caption = element_text(color = "#143642", size = 9, hjust = 0)
   )
 
-ggsave("./docs/assets/lowincome_hist.png", plot=p)
+ggsave("./docs/assets/lowincome_hist.png", plot=p,
+       width = 11, 
+       height = 6,  
+       dpi = 300)
 
 
 ##############################
@@ -93,4 +96,7 @@ p <- ggplot(data_size, aes(x = size_category, y = pct_low_income, fill = size_ca
     plot.caption = element_text(color = "#143642", size = 9, hjust = 0),
     legend.position = "none")
 
-ggsave("./docs/assets/lowincome_violin.png", plot=p)
+ggsave("./docs/assets/lowincome_violin.png", plot=p,
+       width = 11, 
+       height = 6,  
+       dpi = 300)
